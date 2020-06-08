@@ -9,7 +9,9 @@ TwitterTweakTool は、Twitter を少しだけ使いやすくする chrome exten
 これらの機能は不定期に追加されます。
 そのうちオプションでON/OFFの設定をつけるかもしれません。
 
-## 免責
+[chrome ウェブストアで公開しています](https://chrome.google.com/webstore/detail/twittertweaktool/lomiajbdeofimbjfahdjjlkedkfgnfpg)
+
+## 免責事項(?)
 
 このツールはTwitterのHTMLの構造が変わると途端に動かなくなるような作り方がされています。
 そして、Twitterは不定期にHTMLの構造が変わるような変更がなされます。
