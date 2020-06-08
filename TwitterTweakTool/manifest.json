@@ -10,9 +10,9 @@
     }
   ],
   "icons": {
-    "16": "icon/Icon16.png",
-    "48": "icon/Icon48.png",
-    "128": "icon/Icon128.png"
+    "16": "icon/icon16.png",
+    "48": "icon/icon48.png",
+    "128": "icon/icon128.png"
   },
   "manifest_version": 2
 }
