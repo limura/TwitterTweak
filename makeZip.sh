@@ -1,4 +1,6 @@
 #!/bin/sh
 
-rm -f TwitterTweak.zip
-zip -r TwitterTweak.zip TwitterTweak/*.js TwitterTweak/*.json TwitterTweak/_locales/*/messages.json TwitterTweak/icon/*.png TwitterTweak/*.html
+NAME=TwitterTweakTool
+
+rm -f ${NAME}.zip
+zip -r ${NAME}.zip ${NAME}/*.js ${NAME}/*.json ${NAME}/_locales/*/messages.json ${NAME}/icon/icon*.png ${NAME}/*.html
