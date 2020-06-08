@@ -1,6 +1,6 @@
 {
-  "name": "TwitterTweak",
-  "description": "TwitterTweak は、Twitter を少しだけ使いやすくする chrome extension です。",
+  "name": "TwitterTweakTool",
+  "description": "TwitterTweakTool は、Twitter を少しだけ使いやすくする chrome extension です。",
   "version": "1.1",
   "content_scripts": [
     {
