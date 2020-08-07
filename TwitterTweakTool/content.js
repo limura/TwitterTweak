@@ -46,7 +46,8 @@ function CheckAndSetNextPhotoHref(){
     return;
   }
   // 次のtweetがあって
-  let nextPhotoElement = document.evaluate("//div[@aria-label]/div[@style]/div[@style]/div[not(@class) and descendant::article//a[contains(@href,'/status/') and contains(@href,'/photo/')] and preceding-sibling::div[descendant::a[contains(@href,'/retweets')]]][1]//a[contains(@href,'/status/') and contains(@href,'/photo/1')]", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null).snapshotItem(0);
+  let xpath = "//div[@style and not(@id) and preceding-sibling::div[descendant::article[@role='article' and descendant::a[contains(@href,'/retweets')]]]]//a[contains(@href,'/photo/1')]";
+  let nextPhotoElement = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null).snapshotItem(0);
   if(!nextPhotoElement){
     return;
   }
@@ -59,7 +60,8 @@ function CheckAndSetPreviousPhotoHref(){
     return;
   }
   // 前のtweetがあって
-  let previousResult = document.evaluate("//div[@aria-label]/div[@style]/div[@style]/div[not(@class) and descendant::article//a[contains(@href,'/status/') and contains(@href,'/photo/')] and following-sibling::div[descendant::a[contains(@href,'/retweets')]]]//a[contains(@href,'/status/') and contains(@href,'/photo/')]", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+  let xpath = "//div[@style and not(@id) and following-sibling::div[descendant::article[@role='article' and descendant::a[contains(@href,'/retweets')]]]]//a[contains(@href,'/photo')]";
+  let previousResult = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
   if(!previousResult){
     return;
   }
