@@ -79,7 +79,7 @@ function CheckAndSetPreviousPhotoHref(){
 
 document.body.addEventListener('keydown', event => {
   // → キーか ← キーが押されて
-  console.log("keydown", event?.key);
+  //console.log("keydown", event?.key);
   if(event?.key != "ArrowRight" && event?.key != "ArrowLeft"){
     return;
   }
