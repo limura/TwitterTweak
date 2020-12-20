@@ -46,12 +46,12 @@ function CheckAndSetNextPhotoHref(){
     return;
   }
   // 次のtweetがあって
-  let xpath = "//div[@style and not(@id) and preceding-sibling::div[descendant::article[@role='article' and descendant::a[contains(@href,'/retweets')]]]]//a[contains(@href,'/photo/1')]";
+  // 今表示している部分の画像は存在しないので、その画像が存在しないTweetの次のTweetに画像がある奴を探すxpath
+  let xpath = "//div[@aria-label]/div/div[preceding-sibling::div[descendant::article[@role='article' and not(descendant::a[contains(@href,'/photo/1')])]]]//a[contains(@href,'/photo/1')]";
   let nextPhotoElement = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null).snapshotItem(0);
   if(!nextPhotoElement){
     return;
   }
-  console.log("ArrowRight hit and displaying photo and no next photo.", nextPhotoElement);
   NEXT_HREF = nextPhotoElement;
 }
 function CheckAndSetPreviousPhotoHref(){
@@ -61,6 +61,7 @@ function CheckAndSetPreviousPhotoHref(){
   }
   // 前のtweetがあって
   let xpath = "//div[@style and not(@id) and following-sibling::div[descendant::article[@role='article' and descendant::a[contains(@href,'/retweets')]]]]//a[contains(@href,'/photo')]";
+  //let xpath = "//div[@aria-label]/div/div[following-sibling::div[position()=1][descendant::article[@role='article' and not(descendant::a[contains(@href,'/photo/1')])]] and descendant::a[contains(@href,'/photo/1')]]//a[contains(@href,'/photo/')]";
   let previousResult = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
   if(!previousResult){
     return;
@@ -73,7 +74,6 @@ function CheckAndSetPreviousPhotoHref(){
   if(!previousElement){
     return;
   }
-  console.log("ArrowRight hit and displaying photo and no previous photo.", previousElement);
   NEXT_HREF = previousElement;
 }
 
@@ -88,11 +88,9 @@ document.body.addEventListener('keydown', event => {
     return;
   }
   if(event?.key == "ArrowRight"){
-    console.log("check next");
     CheckAndSetNextPhotoHref();
   }
   if(event?.key == "ArrowLeft"){
-    console.log("check previous");
     CheckAndSetPreviousPhotoHref();
   }
 });
