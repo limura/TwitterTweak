@@ -41,14 +41,27 @@ document.body.addEventListener('keyup', event => {
 });
 
 function CheckAndSetNextPhotoHref(){
-  // 次の画像が無くて
+  // 次の画像が無くて(次の画像へのボタンが表示されていないという確認)
   if(document.evaluate("//div[@aria-label and @role='button']//div[@dir='auto']/*[name()='svg']/*[name()='g']/*[contains(@d,'M19.707')]", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null).snapshotItem(0)){
     return;
   }
-  // 次のtweetがあって
-  // 今表示している部分の画像は存在しないので、その画像が存在しないTweetの次のTweetに画像がある奴を探すxpath
-  let xpath = "//div[@aria-label]/div/div[preceding-sibling::div[descendant::article[@role='article' and not(descendant::a[contains(@href,'/photo/1')])]]]//a[contains(@href,'/photo/1')]";
-  let nextPhotoElement = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null).snapshotItem(0);
+  // 画像へのリンクのリストを取り出して
+  let imageUrlXPATH = "//div[@aria-label]/div/div//article[@role='article']//a[contains(@href,'/photo/')]"
+  let imageUrlSnapShots = document.evaluate(imageUrlXPATH, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+  var nextPhotoElement;
+  // それらのリンクの中には今表示しているURLの物があるはずで、その次の物が目指すElementのはず
+  let currentUrl = location.href;
+  if(currentUrl){
+    for(var i = 0; i < imageUrlSnapShots.snapshotLength; i = i + 1){
+      let href = imageUrlSnapShots.snapshotItem(i);
+      if(href === undefined){ break; }
+      let hrefString = href.href;
+      if(currentUrl.indexOf(hrefString) >= 0){
+        nextPhotoElement = imageUrlSnapShots.snapshotItem(i+1);
+        break;
+      }
+    }
+  }
   if(!nextPhotoElement){
     return;
   }
