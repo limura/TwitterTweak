@@ -72,18 +72,23 @@ function CheckAndSetPreviousPhotoHref(){
   if(document.evaluate("//div[@aria-modal='true']//div[@aria-label and @role='button']/div[@dir='auto']/*[name()='svg']/*[name()='g']/*[contains(@d,'M20 11H7')]", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null).snapshotItem(0)){
     return;
   }
-  // 前のtweetがあって
-  let xpath = "//div[@style and not(@id) and following-sibling::div[descendant::article[@role='article' and descendant::a[contains(@href,'/retweets')]]]]//a[contains(@href,'/photo')]";
-  //let xpath = "//div[@aria-label]/div/div[following-sibling::div[position()=1][descendant::article[@role='article' and not(descendant::a[contains(@href,'/photo/1')])]] and descendant::a[contains(@href,'/photo/1')]]//a[contains(@href,'/photo/')]";
-  let previousResult = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-  if(!previousResult){
-    return;
+  // 画像へのリンクのリストを取り出して
+  let imageUrlXPATH = "//div[@aria-label]/div/div//article[@role='article']//a[contains(@href,'/photo/')]"
+  let imageUrlSnapShots = document.evaluate(imageUrlXPATH, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+  var previousElement;
+  // それらのリンクの中には今表示しているURLの物があるはずで、その前の物が目指すElementのはず
+  let currentUrl = location.href;
+  if(currentUrl){
+    for(var i = imageUrlSnapShots.snapshotLength - 1; i >= 1; i = i - 1){
+      let href = imageUrlSnapShots.snapshotItem(i);
+      if(href === undefined){ break; }
+      let hrefString = href.href;
+      if(currentUrl.indexOf(hrefString) >= 0){
+        previousElement = imageUrlSnapShots.snapshotItem(i-1);
+        break;
+      }
+    }
   }
-  let count = previousResult.snapshotLength;
-  if(count <= 0){
-    return;
-  }
-  let previousElement = previousResult.snapshotItem(count - 1);
   if(!previousElement){
     return;
   }
