@@ -37,7 +37,12 @@ document.body.addEventListener('keyup', event => {
   if(!NEXT_HREF){ return; }
   let tmpHref = NEXT_HREF;
   NEXT_HREF = undefined;
-  tmpHref.scrollIntoView(true);
+  if(event?.key == "ArrowRight"){
+    tmpHref.scrollIntoView(true);
+  }
+  if(event?.key == "ArrowLeft"){
+    tmpHref.scrollIntoView(false);
+  }
   tmpHref.click();
 });
 
@@ -85,6 +90,7 @@ function CheckAndSetPreviousPhotoHref(){
       if(href === undefined){ break; }
       let hrefString = href.href;
       if(currentUrl.indexOf(hrefString) >= 0){
+        nextPhotoElement = imageUrlSnapShots.snapshotItem(i+1);
         previousElement = imageUrlSnapShots.snapshotItem(i-1);
         break;
       }
