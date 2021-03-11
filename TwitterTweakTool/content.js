@@ -37,6 +37,7 @@ document.body.addEventListener('keyup', event => {
   if(!NEXT_HREF){ return; }
   let tmpHref = NEXT_HREF;
   NEXT_HREF = undefined;
+  tmpHref.scrollIntoView(true);
   tmpHref.click();
 });
 
