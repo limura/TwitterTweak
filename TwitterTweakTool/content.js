@@ -48,7 +48,7 @@ document.body.addEventListener('keyup', event => {
 
 function CheckAndSetNextPhotoHref(){
   // 次の画像が無くて(次の画像へのボタンが表示されていないという確認)
-  if(document.evaluate("//div[@aria-label and @role='button']//div[@dir='auto']/*[name()='svg']/*[name()='g']/*[contains(@d,'M12.957')]", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null).snapshotItem(0)){
+  if(document.evaluate("//div[@aria-label and @role='button']//div[@dir]/*[name()='svg']/*[name()='g']/*[contains(@d,'M12.957')]", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null).snapshotItem(0)){
     return;
   }
   // 画像へのリンクのリストを取り出して
@@ -75,7 +75,7 @@ function CheckAndSetNextPhotoHref(){
 }
 function CheckAndSetPreviousPhotoHref(){
   // 前の画像が無くて
-  if(document.evaluate("//div[@aria-modal='true']//div[@aria-label and @role='button']/div[@dir='auto']/*[name()='svg']/*[name()='g']/*[contains(@d,'M7.414 13l5.043')]", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null).snapshotItem(0)){
+  if(document.evaluate("//div[@aria-modal='true']//div[@aria-label and @role='button']/div[@dir]/*[name()='svg']/*[name()='g']/*[contains(@d,'M7.414 13l5.043')]", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null).snapshotItem(0)){
     return;
   }
   // 画像へのリンクのリストを取り出して
