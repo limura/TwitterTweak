@@ -84,7 +84,7 @@ function CheckAndSetNextPhotoHref() {
   if (
     document
       .evaluate(
-        "//div[@aria-label and @role='button']//div[@dir]/*[name()='svg']/*[name()='g']/*[contains(@d,'M12.957')]",
+        "//div[@aria-labelledby='modal-header']//div[@data-testid='Carousel-NavRight']",
         document,
         null,
         XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
@@ -130,7 +130,7 @@ function CheckAndSetPreviousPhotoHref() {
   if (
     document
       .evaluate(
-        "//div[@aria-modal='true']//div[@aria-label and @role='button']/div[@dir]/*[name()='svg']/*[name()='g']/*[contains(@d,'M7.414 13l5.043')]",
+        "//div[@aria-labelledby='modal-header']//div[@data-testid='Carousel-NavLeft']",
         document,
         null,
         XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
