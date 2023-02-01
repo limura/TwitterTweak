@@ -17,7 +17,19 @@ function removeAllPromotionTweet() {
   }
 }
 
+let currentUrl = "";
 function forceNewestTweetApply() {
+  let nowUrl = location.href;
+  if (nowUrl == currentUrl) {
+    return;
+  }
+  if (
+    nowUrl != "https://twitter.com/home" &&
+    nowUrl != "https://mobile.twitter.com/home"
+  ) {
+    currentUrl = nowUrl;
+    return;
+  }
   let followTab = document
     .evaluate(
       "//div[@role='tablist']/div[@role='presentation']/a/div/div/div",
@@ -36,19 +48,19 @@ function forceNewestTweetApply() {
       return;
     }
     followTab.click();
+    currentUrl = nowUrl;
   }
 }
 
 let observer = new MutationObserver((e) => {
   removeAllPromotionTweet();
+  forceNewestTweetApply();
 });
 
 setTimeout(() => {
   observer.observe(document.body, { childList: true, subtree: true });
   removeAllPromotionTweet();
 }, 2000);
-
-setTimeout(forceNewestTweetApply, 5000);
 
 // keydown でトリガーして keyup で遷移しないと遷移した直後に keydown が発生して1ページめくられてしまう(´・ω・`)
 var NEXT_HREF = undefined;
