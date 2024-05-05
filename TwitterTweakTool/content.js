@@ -1,6 +1,6 @@
 function removeAllPromotionTweet() {
   let targets = document.evaluate(
-    "//article[child::div//*[name()='svg']/*[name()='g']/*[contains(@d, 'M20.75')]]",
+    "//article[child::div//*[name()='svg']/*[name()='g']/*[contains(@d, 'M19.498')]]",
     document,
     null,
     XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
@@ -52,9 +52,19 @@ function forceNewestTweetApply() {
   }
 }
 
+function ClickMorePostContent() {
+  // この xpath はかなり怪しいので順次直さないと多分だめ。
+  let targetElement = document.evaluate("//div[@data-testid='cellInnerDiv']//div[@role='button' and descendant::span[contains(text(),'ポストをさらに表示')]]", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null)?.snapshotItem(0);
+  if (targetElement) {
+    console.log("TwitterTweakTool: click element:", targetElement);
+    targetElement.click();
+  }
+}
+
 let observer = new MutationObserver((e) => {
   removeAllPromotionTweet();
   forceNewestTweetApply();
+  ClickMorePostContent();
 });
 
 setTimeout(() => {
