@@ -23,30 +23,36 @@ function forceNewestTweetApply() {
   if (nowUrl == currentUrl) {
     return;
   }
-  if (
-    nowUrl != "https://twitter.com/home" &&
-    nowUrl != "https://mobile.twitter.com/home"
-  ) {
+  let homeUrlArray = [
+    "https://twitter.com/home",
+    "https://mobile.twitter.com/home",
+    "https://x.com/home",
+    "https://mobile.x.com/home",
+  ];
+  if (!homeUrlArray.includes(nowUrl)){
     currentUrl = nowUrl;
     return;
   }
-  let followTab = document
-    .evaluate(
-      "//div[@role='tablist']/div[@role='presentation']/a/div/div/div",
-      document,
-      null,
-      XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
-      null
-    )
-    .snapshotItem(1);
-  if (followTab) {
+  let select = document
+  .evaluate(
+    "//div[@role='tablist']/div[@role='presentation']/a/div/div/div",
+    document,
+    null,
+    XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
+    null
+  );
+  let osusumeTab = select.snapshotItem(0); // 「おすすめ」の欄を取得
+  let followTab = select.snapshotItem(1); // 「フォロー中」の欄を取得
+  if (osusumeTab) {
     let tabColor = window
-      .getComputedStyle(followTab)
+      .getComputedStyle(osusumeTab)
       .getPropertyValue("background-color");
-    // 二個目のが選択されているのなら rgba(0, 0, 0, 0) ではないので 0, 0, 0 はみつからないはず
-    if (tabColor.indexOf("0, 0, 0") < 0) {
+    // 選択されている場合、rgb は 0.0.0 ではないはずなので、これがヒットしない場合、「おすすめ」が選択されている。
+    if (tabColor.indexOf("0, 0, 0") >= 0) {
+      // おすすめが選択されていない場合は何もしない。
       return;
     }
+    // おすすめが選択されているならフォロー中を選択する。
     followTab.click();
     currentUrl = nowUrl;
   }
@@ -104,36 +110,9 @@ function CheckAndSetNextPhotoHref() {
   ) {
     return;
   }
-  // 画像へのリンクのリストを取り出して
-  let imageUrlXPATH =
-    "//div[@aria-label]/div/div//article[@role='article']//a[contains(@href,'/photo/')]";
-  let imageUrlSnapShots = document.evaluate(
-    imageUrlXPATH,
-    document,
-    null,
-    XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
-    null
-  );
-  var nextPhotoElement;
-  // それらのリンクの中には今表示しているURLの物があるはずで、その次の物が目指すElementのはず
-  let currentUrl = location.href;
-  if (currentUrl) {
-    for (var i = 0; i < imageUrlSnapShots.snapshotLength; i = i + 1) {
-      let href = imageUrlSnapShots.snapshotItem(i);
-      if (href === undefined) {
-        break;
-      }
-      let hrefString = href.href;
-      if (currentUrl.indexOf(hrefString) >= 0) {
-        nextPhotoElement = imageUrlSnapShots.snapshotItem(i + 1);
-        break;
-      }
-    }
-  }
-  if (!nextPhotoElement) {
-    return;
-  }
-  NEXT_HREF = nextPhotoElement;
+  // 現在表示している画像のあるポストには「時間 - 年月日」みたいなリンクがある(他のにはない)ので、それを目標に前後のポストの画像を取り出します。
+  let nextImagePhotoElement = document.evaluate("//div[@data-testid='cellInnerDiv' and preceding-sibling::div[descendant::a[@role='link' and @aria-describedby]]]//a[contains(@href,'/photo/1')]", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null).snapshotItem(0);
+  NEXT_HREF = nextImagePhotoElement;
 }
 function CheckAndSetPreviousPhotoHref() {
   // 前の画像が無くて
@@ -150,37 +129,14 @@ function CheckAndSetPreviousPhotoHref() {
   ) {
     return;
   }
-  // 画像へのリンクのリストを取り出して
-  let imageUrlXPATH =
-    "//div[@aria-label]/div/div//article[@role='article']//a[contains(@href,'/photo/')]";
-  let imageUrlSnapShots = document.evaluate(
-    imageUrlXPATH,
-    document,
-    null,
-    XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
-    null
-  );
-  var previousElement;
-  // それらのリンクの中には今表示しているURLの物があるはずで、その前の物が目指すElementのはず
-  let currentUrl = location.href;
-  if (currentUrl) {
-    for (var i = imageUrlSnapShots.snapshotLength - 1; i >= 1; i = i - 1) {
-      let href = imageUrlSnapShots.snapshotItem(i);
-      if (href === undefined) {
-        break;
-      }
-      let hrefString = href.href;
-      if (currentUrl.indexOf(hrefString) >= 0) {
-        nextPhotoElement = imageUrlSnapShots.snapshotItem(i + 1);
-        previousElement = imageUrlSnapShots.snapshotItem(i - 1);
-        break;
-      }
-    }
+  // 現在表示している画像のあるポストには「時間 - 年月日」みたいなリンクがある(他のにはない)ので、それを目標に前後のポストの画像を取り出します。
+  let prevImagePhotoElementTargets = document.evaluate("//div[@data-testid='cellInnerDiv' and following-sibling::div[descendant::a[@role='link' and @aria-describedby]]]//a[contains(@href,'/photo/')]", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+  if (prevImagePhotoElementTargets && prevImagePhotoElementTargets.snapshotLength > 0) {
+    let lastIndex = prevImagePhotoElementTargets.snapshotLength - 1;
+    NEXT_HREF = prevImagePhotoElementTargets.snapshotItem(lastIndex);
+  }else{
+    NEXT_HREF = null;
   }
-  if (!previousElement) {
-    return;
-  }
-  NEXT_HREF = previousElement;
 }
 
 document.body.addEventListener("keydown", (event) => {
