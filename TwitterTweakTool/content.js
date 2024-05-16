@@ -60,7 +60,7 @@ function forceNewestTweetApply() {
 
 function ClickMorePostContent() {
   // この xpath はかなり怪しいので順次直さないと多分だめ。
-  let targetElement = document.evaluate("//div[@data-testid='cellInnerDiv']//div[@role='button' and descendant::span[contains(text(),'ポストをさらに表示')]]", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null)?.snapshotItem(0);
+  let targetElement = document.evaluate("//div[@data-testid='cellInnerDiv']//*[@role='button' and descendant::span[contains(text(),'ポストをさらに表示')]]", document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null)?.snapshotItem(0);
   if (targetElement) {
     console.log("TwitterTweakTool: click element:", targetElement);
     targetElement.click();
