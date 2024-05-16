@@ -1,4 +1,4 @@
-TwitterTweakTool は、Twitter を少しだけ使いやすくする chrome extension です。
+TwitterTweakTool は、X(Twitter) を少しだけ使いやすくする chrome extension です。
 
 具体的には以下のような事をします。
 
